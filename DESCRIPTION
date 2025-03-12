@@ -2,10 +2,17 @@ Package: zonalstatsR
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Author: Kaden Patten, Alexander Hernandez, USDA ARS FRRL
+Maintainer: kaden.patten@usda.gov
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Language: en-US
+Imports: 
+    exactextractr (>=0.10.0),
+    terra (>=1.8-21),
+    sf (>=1.0-19)
+Depends:
+    R (>=4.4.3)
