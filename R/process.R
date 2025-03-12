@@ -1,8 +1,3 @@
-library(terra)
-library(sf)
-library(exactextractr)
-
-
 #' @title run_indices
 #'
 #' @description Run multiple vegetation index calculation over multiple images,
@@ -12,19 +7,21 @@ library(exactextractr)
 #' @param indices A named list generator from the read_indices function
 #' @param bands A vector or list of ordered band names for the images
 #' @param img_dir File path to folder containing images to run on
-#' @param proc_dir
+#' @param proc_dir File path to the processing folder for temporary files
 #' @param gpkg File path to a geopackage or an sf object
 #'
 #' @return An sf dataframe with geopackage data and extracted index information
 #' @examples
 #' result <- point_extract(some_raster,some_gpkg)
 #'
-run_indices <- function(to_run,indices,bands,img_dir,proc_dir,gpkg,save_dir="",points=FALSE){
+run_indices <- function(to_run,indices,bands,img_dir,proc_dir,gpkg,
+                        save_dir="",points=FALSE){
   if(class(gpkg)[1]=="character"){
     gpkg <- st_read(gpkg)
   }
   clip_dir <- img_clip(img_dir,proc_dir,gpkg)
-  imgs <- list.files(path=clip_dir,pattern="(.tif|.tiff|.TIF|.TIFF)$",all.files=FALSE,full.names=FALSE)
+  imgs <- list.files(path=clip_dir,pattern="(.tif|.tiff|.TIF|.TIFF)$",
+                     all.files=FALSE,full.names=FALSE)
   for(i in imgs){
     data <- rast(file.path(clip_dir,i))
     cur_gpkg <- st_read(file.path(proc_dir,paste(tools::file_path_sans_ext(i),".gpkg",sep="")))
@@ -144,7 +141,7 @@ volume_calc <- function(gpkg,data){
     data <- rast(data)
   }
   alts <- c()
-  for(r in 1:nrow(gpkg)){
+  for(r in seq_len(gpkg)){
     xmin <- ext(st_sf(gpkg$geom[r]))$xmin
     xmax <- ext(st_sf(gpkg$geom[r]))$xmax
     ymin <- ext(st_sf(gpkg$geom[r]))$ymin
