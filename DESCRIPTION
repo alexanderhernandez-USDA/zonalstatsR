@@ -1,9 +1,10 @@
 Package: zonalstatsR
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Calculate indices and extract data from rasters
 Version: 0.1.0
-Author: Kaden Patten, Alexander Hernandez, USDA ARS FRRL
-Maintainer: kaden.patten@usda.gov
+Authors@R: c(
+  person("Kaden","Patten",email="kaden.patten@usda.gov",role=c("aut","cre")),
+  person("Alexander","Hernandez",email="alexander.hernandez@usda.gov",role=c("aut")))
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: GPL-3
@@ -17,3 +18,5 @@ Imports:
 Depends:
     R (>= 4.4.3)
 RoxygenNote: 7.3.2
+URL: https://github.com/KadenPatten-USDA/zonalstatsR
+BugReports: https://github.com/KadenPatten-USDA/zonalstatsR/issues

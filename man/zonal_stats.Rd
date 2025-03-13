@@ -31,7 +31,8 @@ zonal_stats(
 \item{points}{Set to FALSE by default, set to TRUE if geopackage uses points}
 
 \item{buffer}{Set to 0 be default, set to a nonzero number to
-generate buffers around points}
+generate buffers around points. When using buffer, please have your
+geopackage and raster in a CRS which uses meters}
 }
 \value{
 An sf dataframe with geopackage data and extracted index information
@@ -39,8 +40,4 @@ An sf dataframe with geopackage data and extracted index information
 \description{
 Perform index or volume calculations, and extract data by
      polygon or points.
-}
-\examples{
-result <- zonal_stats("/path/to/images",c("red","green","blue","rededge","nir"),c("GLI","BI"),"/path/to/polys.gpkg")
-
 }

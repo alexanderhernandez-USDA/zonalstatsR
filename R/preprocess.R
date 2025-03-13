@@ -1,3 +1,6 @@
+#' @import terra
+#' @import sf
+#' @noRd
 img_clip <- function(img_dir,proc_dir,gpkg){
   imgs <- list.files(path=img_dir,pattern="(.tif|.tiff|.TIF|.TIFF)$",
                      all.files=FALSE,full.names=FALSE)
@@ -19,6 +22,7 @@ img_clip <- function(img_dir,proc_dir,gpkg){
   return(file.path(proc_dir,paste(base_name,"_clips",sep="")))
 }
 
+#' @noRd
 read_indices <- function(conf_path){
   content <- readLines(conf_path)
   indices <- list()

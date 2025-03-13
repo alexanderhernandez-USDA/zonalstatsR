@@ -11,9 +11,11 @@
 #' @param gpkg File path to a geopackage or an sf object
 #'
 #' @return An sf dataframe with geopackage data and extracted index information
-#' @examples
-#' result <- point_extract(some_raster,some_gpkg)
 #'
+#' @noRd
+#' @import terra
+#' @import sf
+#' @import exactextractr
 run_indices <- function(to_run,indices,bands,img_dir,proc_dir,gpkg,
                         save_dir="",points=FALSE){
   if(class(gpkg)[1]=="character"){
@@ -59,9 +61,10 @@ run_indices <- function(to_run,indices,bands,img_dir,proc_dir,gpkg,
 #' @param gpkg An sf object
 #'
 #' @return A dataframe with point values for the geopackage points
-#' @examples
-#' result <- point_extract(some_raster,some_gpkg)
 #'
+#' @noRd
+#' @import terra
+#' @import sf
 point_extract <- function(data,gpkg){
   return(extract(data,gpkg))
 }
@@ -83,9 +86,10 @@ point_extract <- function(data,gpkg){
 #'
 #' @return A terra SpatRaster object with the resulting raster after the
 #'      calculation has been performed
-#' @examples
-#' result <- run_calc(c("red","green","blue"),"b/g",some_raster)
 #'
+#' @noRd
+#' @import terra
+#' @import sf
 run_calc <- function(bands,calc,data){
   if("red" %in% bands){
     r <- data[[match("red",bands)]]
@@ -129,10 +133,10 @@ run_calc <- function(bands,calc,data){
 #'
 #' @return A terra SpatRaster object containing volumes for each pixel, to be
 #'    extracted using exact_extract
-#' @examples
-#' volumes <- volume_calc("/path/to/polygons.gpkg","/path/to/dsm.tif")
 #'
-
+#' @noRd
+#' @import terra
+#' @import sf
 volume_calc <- function(gpkg,data){
   if(class(gpkg)[1]=="character"){
     gpkg <- st_read(gpkg)
@@ -141,18 +145,18 @@ volume_calc <- function(gpkg,data){
     data <- rast(data)
   }
   alts <- c()
-  for(r in seq_len(gpkg)){
+  for(r in 1:nrow(gpkg)){
     xmin <- ext(st_sf(gpkg$geom[r]))$xmin
     xmax <- ext(st_sf(gpkg$geom[r]))$xmax
     ymin <- ext(st_sf(gpkg$geom[r]))$ymin
     ymax <- ext(st_sf(gpkg$geom[r]))$ymax
     corners <- st_sf(geometry=st_sfc(c(st_point(c(xmin,ymin)),st_point(c(xmax,ymin)),st_point(c(xmax,ymax)),st_point(c(xmin,ymax)))),crs=crs(gpkg))
-    avg_alt <- sum(extract(img,corners)[2])/4
+    avg_alt <- sum(extract(data,corners)[2])/4
     alts[r] <- avg_alt
   }
   plane <- rasterize(vect(gpkg$geom),data,field=alts,background=0,touches=TRUE)
   heights <- data - plane
-  pix_area <- res(img)[1] * res(img)[2]
+  pix_area <- res(data)[1] * res(data)[2]
   volumes <- heights * pix_area
   volumes <- ifel(volumes > 0, volumes, 0)
   return(volumes)
