@@ -5,9 +5,10 @@ Version: 0.1.0
 Authors@R: c(
   person("Kaden","Patten",email="kaden.patten@usda.gov",role=c("aut","cre")),
   person("Alexander","Hernandez",email="alexander.hernandez@usda.gov",role=c("aut")))
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: GPL-3
+Description: Calculates vegetation indices for raster data and performs extraction
+  of data using exactextractr. Volume can also be calculated using index VOLUME.
+  Raw extraction of data can be performed using index RAW.
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Language: en-US
@@ -16,7 +17,7 @@ Imports:
     terra (>= 1.8-21),
     sf (>= 1.0-19)
 Depends:
-    R (>= 4.4.3)
+    R (>= 4.4.0)
 RoxygenNote: 7.3.2
 URL: https://github.com/KadenPatten-USDA/zonalstatsR
 BugReports: https://github.com/KadenPatten-USDA/zonalstatsR/issues

@@ -5,7 +5,9 @@
 #'
 #' @param img_dir File path to folder with rasters
 #' @param bands List or vector containing band names in order for rasters
-#' @param to_run List or vector containing the index names to run
+#' @param to_run List or vector containing the index names to run.
+#'    Volume can also be calculated using index VOLUME.
+#'    Raw extraction of data can be performed using index RAW.
 #' @param gpkg File path to geopackage or sf object
 #' @param out_gpkg Optional, path to an output geopackage
 #' @param save_dir Optional, path to a folder to save calculation rasters in

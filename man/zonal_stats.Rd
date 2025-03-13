@@ -20,7 +20,9 @@ zonal_stats(
 
 \item{bands}{List or vector containing band names in order for rasters}
 
-\item{to_run}{List or vector containing the index names to run}
+\item{to_run}{List or vector containing the index names to run.
+Volume can also be calculated using index VOLUME.
+Raw extraction of data can be performed using index RAW.}
 
 \item{gpkg}{File path to geopackage or sf object}
 

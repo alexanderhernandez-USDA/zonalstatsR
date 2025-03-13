@@ -35,6 +35,15 @@ run_indices <- function(to_run,indices,bands,img_dir,proc_dir,gpkg,
         }else{
           res <- exact_extract(ras,cur_gpkg,'sum')
         }
+      }else if(toupper(c)=="RAW"){
+        if(points){
+          res <- point_extract(data,cur_gpkg)
+        }else{
+          res <- exact_extract(data,cur_gpkg,'median')
+        }
+        for(b in 1:length(bands)){
+          gpkg[paste(tools::file_path_sans_ext(i),"_",bands[b],sep="")] <- res[b]
+        }
       }else{
         ras <- run_calc(bands,indices[[c]],data)
         if(points){
@@ -43,7 +52,9 @@ run_indices <- function(to_run,indices,bands,img_dir,proc_dir,gpkg,
           res <- exact_extract(ras,cur_gpkg,'median')
         }
       }
-      gpkg[paste(tools::file_path_sans_ext(i),"_",c,sep="")] <- res
+      if(toupper(c)!="RAW"){
+        gpkg[paste(tools::file_path_sans_ext(i),"_",c,sep="")] <- res
+      }
       if(save_dir!=""){
         writeRaster(ras,file.path(save_dir,paste(tools::file_path_sans_ext(i),"_",c,".tif",sep="")),overwrite=TRUE)
       }
