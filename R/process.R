@@ -126,7 +126,7 @@ run_calc <- function(bands,calc,data){
     print("Error: no rededge band!")
     return("error")
   }
-  if("nirgreen" %in% bands){
+  if("nir" %in% bands){
     n <- data[[match("nir",bands)]]
   }else if(grepl("n[^a-zA-Z]",calc)){
     print("Error: no nir band!")
