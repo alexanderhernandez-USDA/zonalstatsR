@@ -17,6 +17,7 @@
 #' @import sf
 #' @import exactextractr
 #' @import foreach
+#' @import parallel
 #' @import doParallel
 run_indices <- function(to_run,indices,bands,img_dir,proc_dir,gpkg,
                         save_dir="",points=FALSE){

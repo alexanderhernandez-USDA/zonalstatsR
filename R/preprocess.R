@@ -2,6 +2,8 @@
 #' @import sf
 #' @import doParallel
 #' @import foreach
+#' @import parallel
+#' @import doParallel
 #' @noRd
 img_clip <- function(img_dir,proc_dir,gpkg){
   imgs <- list.files(path=img_dir,pattern="(.tif|.tiff|.TIF|.TIFF)$",
