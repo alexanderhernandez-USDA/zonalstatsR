@@ -1,5 +1,7 @@
 #' @import terra
 #' @import sf
+#' @import doParallel
+#' @import foreach
 #' @noRd
 img_clip <- function(img_dir,proc_dir,gpkg){
   imgs <- list.files(path=img_dir,pattern="(.tif|.tiff|.TIF|.TIFF)$",
@@ -8,7 +10,15 @@ img_clip <- function(img_dir,proc_dir,gpkg){
   if(!dir.exists(file.path(proc_dir,paste(base_name,"_clips",sep="")))){
     dir.create(file.path(proc_dir,paste(base_name,"_clips",sep="")))
   }
-  for (i in imgs){
+
+  n_cores <- detectCores()
+  if(n_cores %/% 2 > length(imgs)){
+    cluster <- makeCluster(length(imgs))
+  }else{
+    cluster <- makeCluster(n_cores %/% 2)
+  }
+  registerDoParallel(cluster)
+  foreach(i=imgs,.packages=c("terra","sf")) %dopar% {
     data <- rast(file.path(img_dir,i))
     inter <- relate(vect(gpkg),ext(data),"intersects")
     data_bound <- vect(ext(data),crs=crs(data))
@@ -19,6 +29,7 @@ img_clip <- function(img_dir,proc_dir,gpkg){
     writeRaster(img_crop,file.path(proc_dir,paste(base_name,"_clips",sep=""),i),
                 overwrite=TRUE)
   }
+  stopCluster(cluster)
   return(file.path(proc_dir,paste(base_name,"_clips",sep="")))
 }
 
@@ -43,4 +54,6 @@ read_indices <- function(conf_path){
   }
   return(indices)
 }
+
+
 

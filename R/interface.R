@@ -8,6 +8,8 @@
 #' @param to_run List or vector containing the index names to run.
 #'    Volume can also be calculated using index VOLUME.
 #'    Raw extraction of data can be performed using index RAW.
+#'    All vegetation indices can be run using keyword ALL instead of using a
+#'    list/vector of indices.
 #' @param gpkg File path to geopackage or sf object
 #' @param out_gpkg Optional, path to an output geopackage
 #' @param save_dir Optional, path to a folder to save calculation rasters in
@@ -37,6 +39,9 @@ zonal_stats <- function(img_dir,bands,to_run,gpkg,out_gpkg="",
     gpkg <- st_buffer(gpkg,buffer)
   }
   indices <- read_indices(system.file("extdata","indices.conf",package="zonalstatsR"))
+  if(to_run=="ALL"){
+    to_run <- names(indices)
+  }
   res <- run_indices(to_run,indices,bands,img_dir,proc_dir,
                      gpkg,save_dir=save_dir,points=points)
   unlink(proc_dir,recursive=TRUE)

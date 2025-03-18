@@ -22,7 +22,9 @@ zonal_stats(
 
 \item{to_run}{List or vector containing the index names to run.
 Volume can also be calculated using index VOLUME.
-Raw extraction of data can be performed using index RAW.}
+Raw extraction of data can be performed using index RAW.
+All vegetation indices can be run using keyword ALL instead of using a
+list/vector of indices.}
 
 \item{gpkg}{File path to geopackage or sf object}
 

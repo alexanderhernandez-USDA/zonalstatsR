@@ -16,6 +16,8 @@
 #' @import terra
 #' @import sf
 #' @import exactextractr
+#' @import foreach
+#' @import doParallel
 run_indices <- function(to_run,indices,bands,img_dir,proc_dir,gpkg,
                         save_dir="",points=FALSE){
   if(class(gpkg)[1]=="character"){
@@ -24,10 +26,20 @@ run_indices <- function(to_run,indices,bands,img_dir,proc_dir,gpkg,
   clip_dir <- img_clip(img_dir,proc_dir,gpkg)
   imgs <- list.files(path=clip_dir,pattern="(.tif|.tiff|.TIF|.TIFF)$",
                      all.files=FALSE,full.names=FALSE)
+
+  n_cores <- detectCores()
+  if(n_cores %/% 2 > length(to_run) && !"RAW" %in% to_run){
+    cluster <- makeCluster(length(to_run))
+  }else if("RAW" %in% to_run && n_cores %/% 2 > (length(to_run) + length(bands))){
+    cluster <- makeCluster(length(to_run) + length(bands))
+  }else{
+    cluster <- makeCluster(n_cores %/% 2)
+  }
+  registerDoParallel(cluster)
   for(i in imgs){
-    data <- rast(file.path(clip_dir,i))
     cur_gpkg <- st_read(file.path(proc_dir,paste(tools::file_path_sans_ext(i),".gpkg",sep="")))
-    for(c in to_run){
+    output <- foreach(c=to_run,.export=c("run_calc"),.packages=c("sf","terra","exactextractr")) %dopar% {
+      data <- rast(file.path(clip_dir,i))
       if(toupper(c)=="VOLUME"){
         ras <- volume_calc(cur_gpkg,data)
         if(points){
@@ -41,9 +53,9 @@ run_indices <- function(to_run,indices,bands,img_dir,proc_dir,gpkg,
         }else{
           res <- exact_extract(data,cur_gpkg,'median')
         }
-        for(b in 1:length(bands)){
-          gpkg[paste(tools::file_path_sans_ext(i),"_",bands[b],sep="")] <- res[b]
-        }
+        #for(b in 1:length(bands)){
+        #  gpkg[paste(tools::file_path_sans_ext(i),"_",bands[b],sep="")] <- res[b]
+        #}
       }else{
         ras <- run_calc(bands,indices[[c]],data)
         if(points){
@@ -52,14 +64,25 @@ run_indices <- function(to_run,indices,bands,img_dir,proc_dir,gpkg,
           res <- exact_extract(ras,cur_gpkg,'median')
         }
       }
-      if(toupper(c)!="RAW"){
-        gpkg[paste(tools::file_path_sans_ext(i),"_",c,sep="")] <- res
-      }
+      #if(toupper(c)!="RAW"){
+      #  gpkg[paste(tools::file_path_sans_ext(i),"_",c,sep="")] <- res
+      #}
       if(save_dir!=""){
         writeRaster(ras,file.path(save_dir,paste(tools::file_path_sans_ext(i),"_",c,".tif",sep="")),overwrite=TRUE)
       }
+      res
+    }
+    for(n in 1:length(to_run)){
+      if(toupper(to_run[n])=="RAW"){
+        for(b in 1:length(bands)){
+          gpkg[paste(tools::file_path_sans_ext(i),"_",bands[b],sep="")] <- output[[n]][b]
+        }
+      }else{
+        gpkg[paste(tools::file_path_sans_ext(i),"_",to_run[n],sep="")] <- output[n]
+      }
     }
   }
+  stopCluster(cluster)
   return(gpkg)
 }
 
@@ -126,7 +149,7 @@ run_calc <- function(bands,calc,data){
     print("Error: no rededge band!")
     return("error")
   }
-  if("nirgreen" %in% bands){
+  if("nir" %in% bands){
     n <- data[[match("nir",bands)]]
   }else if(grepl("n[^a-zA-Z]",calc)){
     print("Error: no nir band!")
