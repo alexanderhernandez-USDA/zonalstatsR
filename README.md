@@ -2,7 +2,7 @@
 R package for performing vegetation index calculations, volume calculation, and extraction of calculated and raw data.
 
 ## Installation
-The package and its dependencies can be installed using the devtools package. You may need to install devtools if it isn't already present on your machine. Download the tar.gz package file for zonalstatsR, and then run the following in R or RStudio:
+The package and its dependencies can be installed using the devtools package. You may need to install devtools if it isn't already present on your machine. Download the [latest release](https://github.com/KadenPatten-USDA/zonalstatsR/releases) tar.gz package file for zonalstatsR, and then run the following in R or RStudio:
 ```
 devtools::install_local("/path/to/zonalstatsR_0.1.0.tar.gz")
 ```
