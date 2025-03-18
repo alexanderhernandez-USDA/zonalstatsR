@@ -37,9 +37,11 @@ zonal_stats <- function(img_dir,bands,to_run,gpkg,out_gpkg="",
   }
   if(buffer != 0){
     gpkg <- st_buffer(gpkg,buffer)
+    points <- FALSE
   }
-  indices <- read_indices(system.file("extdata","indices.conf",package="zonalstatsR"))
-  if(to_run=="ALL"){
+  indices <- read_indices(system.file("extdata","indices.conf",package="zonalstatsR"))$calcs
+  if(length(to_run)==1 && to_run=="ALL"){
+    print("Running all indices")
     to_run <- names(indices)
   }
   res <- run_indices(to_run,indices,bands,img_dir,proc_dir,
@@ -51,4 +53,19 @@ zonal_stats <- function(img_dir,bands,to_run,gpkg,out_gpkg="",
   endT <- Sys.time()
   print(endT - startT)
   return(res)
+}
+
+
+#' @title list_indices
+#'
+#' @description Print all available vegetation indices and their calculations
+#' @name list_indices
+#' @export
+list_indices <- function(){
+  indices <- read_indices(system.file("extdata","indices.conf",package="zonalstatsR"))
+  calcs <- indices$calcs
+  descs <- indices$details
+  for(i in 1:length(descs)){
+    print(paste(names(descs)[i],descs[i],calcs[i],sep=":"))
+  }
 }

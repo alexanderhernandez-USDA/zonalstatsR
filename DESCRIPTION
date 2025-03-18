@@ -1,13 +1,14 @@
 Package: zonalstatsR
 Type: Package
 Title: Calculate indices and extract data from rasters
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
   person("Kaden","Patten",email="kaden.patten@usda.gov",role=c("aut","cre")),
   person("Alexander","Hernandez",email="alexander.hernandez@usda.gov",role=c("aut")))
 Description: Calculates vegetation indices for raster data and performs extraction
   of data using exactextractr. Volume can also be calculated using index VOLUME.
-  Raw extraction of data can be performed using index RAW.
+  Raw extraction of data can be performed using index RAW. All indices can be run
+  using ALL.
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true

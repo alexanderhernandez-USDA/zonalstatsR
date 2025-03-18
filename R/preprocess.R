@@ -39,6 +39,7 @@ img_clip <- function(img_dir,proc_dir,gpkg){
 read_indices <- function(conf_path){
   content <- readLines(conf_path)
   indices <- list()
+  detail <- list()
   name <- ""
   desc <- ""
   calc <- ""
@@ -51,10 +52,11 @@ read_indices <- function(conf_path){
       }else if(grepl("calc",l)){
         calc <- strsplit(l,":")[[1]][2]
         indices[[name]] <- calc
+        detail[[name]] <- desc
       }
     }
   }
-  return(indices)
+  return(list(calcs=indices,details=detail))
 }
 
 
