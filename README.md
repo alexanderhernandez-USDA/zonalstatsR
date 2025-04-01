@@ -4,7 +4,7 @@ R package for performing vegetation index calculations, volume calculation, and 
 ## Installation
 The package and its dependencies can be installed using the devtools package. You may need to install devtools if it isn't already present on your machine. Download the [latest release](https://github.com/KadenPatten-USDA/zonalstatsR/releases) tar.gz package file for zonalstatsR, and then run the following in R or RStudio:
 ```
-devtools::install_local("/path/to/zonalstatsR_0.1.0.tar.gz")
+devtools::install_local("/path/to/zonalstatsR_0.1.1.tar.gz")
 ```
 Once the installation has finished, you can load zonalstatsR with
 ```
@@ -49,3 +49,9 @@ Set to FALSE by default, set to TRUE if geopackage uses points
 Set to 0 be default, set to a nonzero number to generate buffers around points. When using buffer, please have your geopackage and raster in a CRS which uses meters
 
 After running the `zonal_stats` function, an sf object is returned with values for all polygons for the calculated indices.
+
+To view available vegetation index calculations, you can use the following function:
+```
+list_indices()
+```
+This will display available indices.
